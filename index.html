@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>그냥 카페 | 목동 동네 카페</title>
+  <meta name="description" content="양천구 목동의 작고 따뜻한 동네 카페, 그냥 카페. 핸드드립 커피와 쿠키, 베이커리가 있는 공간입니다.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://images.unsplash.com">
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☕</text></svg>">
+  <style>
+    :root {
+      --cream: #f6efe4;
+      --paper: #fbf7f0;
+      --wood: #8b5e3c;
+      --wood-dark: #3e2a1c;
+      --wood-light: #c49a6c;
+      --green: #4f6f3a;
+      --green-pale: #e3ead6;
+      --text: #33251a;
+      --muted: #75614f;
+      --radius: 16px;
+      --shadow: 0 14px 40px rgba(62, 42, 28, 0.18);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Noto Sans KR", sans-serif;
+      background: var(--cream); color: var(--text);
+      line-height: 1.75; -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(1140px, 100% - 32px); margin-inline: auto; }
+    h1, h2, h3, .serif { font-family: "Gowun Batang", serif; }
+
+    /* 사진 공통: 따뜻한 톤 보정 */
+    .photo { object-fit: cover; width: 100%; height: 100%; filter: saturate(1.05) contrast(1.02); }
+
+    /* ---------- 헤더 ---------- */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      transition: background .3s, box-shadow .3s;
+    }
+    header.scrolled { background: rgba(251, 247, 240, 0.95); backdrop-filter: blur(8px); box-shadow: 0 2px 16px rgba(0,0,0,.06); }
+    .nav { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+    .logo { font-family: "Gowun Batang", serif; font-size: 1.4rem; font-weight: 700; color: #fff; transition: color .3s; }
+    .nav ul { display: flex; gap: 28px; list-style: none; }
+    .nav ul a { font-size: .95rem; color: rgba(255,255,255,.88); font-weight: 500; transition: color .3s; }
+    header.scrolled .logo { color: var(--wood-dark); }
+    header.scrolled .nav ul a { color: var(--muted); }
+    .nav ul a:hover { color: var(--wood-light) !important; }
+
+    /* ---------- 히어로 (전체 화면 사진) ---------- */
+    .hero {
+      position: relative; min-height: 100vh; min-height: 100svh;
+      display: flex; align-items: flex-end;
+      color: #fff; overflow: hidden;
+    }
+    .hero .bg { position: absolute; inset: 0; z-index: -2; }
+    .hero .bg img { animation: slowzoom 22s ease-out forwards; }
+    @keyframes slowzoom { from { transform: scale(1.12); } to { transform: scale(1); } }
+    .hero::after {
+      content: ""; position: absolute; inset: 0; z-index: -1;
+      background:
+        linear-gradient(to top, rgba(30, 20, 12, .85) 0%, rgba(30, 20, 12, .35) 45%, rgba(30, 20, 12, .25) 100%);
+    }
+    .hero .container { padding-bottom: 12vh; }
+    .hero .eyebrow {
+      display: inline-block; font-size: .9rem; letter-spacing: .25em;
+      color: #e8d6bd; margin-bottom: 16px;
+    }
+    .hero h1 { font-size: clamp(3rem, 8vw, 5.6rem); line-height: 1.12; margin-bottom: 20px; text-shadow: 0 2px 20px rgba(0,0,0,.3); }
+    .hero p.lead { font-size: clamp(1rem, 2vw, 1.2rem); max-width: 32em; color: rgba(255,255,255,.9); margin-bottom: 34px; }
+    .btns { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 28px; border-radius: 999px; font-weight: 500;
+      transition: transform .2s, background .2s;
+    }
+    .btn-primary { background: var(--wood-light); color: var(--wood-dark); }
+    .btn-primary:hover { background: #d8b388; transform: translateY(-2px); }
+    .btn-ghost { border: 1.5px solid rgba(255,255,255,.7); color: #fff; }
+    .btn-ghost:hover { background: rgba(255,255,255,.12); transform: translateY(-2px); }
+    .hero-info {
+      display: flex; gap: 28px; flex-wrap: wrap; margin-top: 48px;
+      padding-top: 24px; border-top: 1px solid rgba(255,255,255,.25);
+      font-size: .95rem; color: rgba(255,255,255,.85);
+    }
+    .hero-info b { color: #fff; font-weight: 500; }
+
+    /* ---------- 공통 섹션 ---------- */
+    section { padding: 100px 0; }
+    .eyebrow-dark { color: var(--green); font-size: .85rem; letter-spacing: .22em; font-weight: 700; }
+    .section-head { text-align: center; margin-bottom: 52px; }
+    .section-head h2 { font-size: clamp(1.9rem, 4vw, 2.6rem); color: var(--wood-dark); margin-top: 6px; }
+    .section-head p { color: var(--muted); margin-top: 10px; }
+
+    /* ---------- 소개 ---------- */
+    .about { background: var(--paper); }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .collage { display: grid; grid-template-columns: 1.2fr 1fr; grid-template-rows: 220px 220px; gap: 14px; }
+    .collage figure { border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+    .collage figure:first-child { grid-row: span 2; }
+    .collage img { transition: transform .8s ease; }
+    .collage figure:hover img { transform: scale(1.06); }
+    .about-text h2 { font-size: clamp(1.9rem, 4vw, 2.5rem); color: var(--wood-dark); margin: 8px 0 20px; line-height: 1.35; }
+    .about-text p { color: var(--muted); margin-bottom: 16px; }
+    .points { list-style: none; margin-top: 26px; display: grid; gap: 14px; }
+    .points li { display: flex; gap: 14px; align-items: flex-start; }
+    .points .ico {
+      flex: none; width: 42px; height: 42px; border-radius: 12px;
+      background: var(--green-pale); display: grid; place-items: center; font-size: 1.2rem;
+    }
+    .points b { display: block; color: var(--wood-dark); }
+    .points span { font-size: .92rem; color: var(--muted); }
+
+    /* ---------- 메뉴 ---------- */
+    .menu { background: var(--cream); }
+    .tabs { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 32px; }
+    .tab {
+      border: 1.5px solid var(--wood-light); background: transparent; color: var(--wood-dark);
+      padding: 10px 22px; border-radius: 999px; font-family: inherit; font-size: .95rem; font-weight: 500;
+      cursor: pointer; transition: all .2s;
+    }
+    .tab:hover { background: var(--paper); }
+    .tab.active { background: var(--wood-dark); color: #fff; border-color: var(--wood-dark); }
+    .tab.special.active { background: var(--green); border-color: var(--green); }
+
+    .menu-panel { display: none; }
+    .menu-panel.active { display: grid; grid-template-columns: 380px 1fr; gap: 0; animation: fade .4s ease; }
+    @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    .menu-panel, .menu-panel.active {
+      background: var(--paper); border-radius: 22px; overflow: hidden; box-shadow: var(--shadow);
+    }
+    .menu-photo { position: relative; min-height: 420px; }
+    .menu-photo img { position: absolute; inset: 0; }
+    .menu-photo .cap {
+      position: absolute; left: 0; right: 0; bottom: 0; padding: 60px 28px 24px;
+      background: linear-gradient(to top, rgba(30,20,12,.8), transparent);
+      color: #fff;
+    }
+    .menu-photo .cap h3 { font-size: 1.6rem; }
+    .menu-photo .cap p { font-size: .9rem; opacity: .85; }
+    .menu-body { padding: 36px 40px; }
+    .menu-list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; column-gap: 40px; }
+    .menu-item {
+      display: flex; align-items: baseline; gap: 10px; padding: 13px 0;
+      border-bottom: 1px dashed rgba(139, 94, 60, .25);
+    }
+    .menu-item .name { font-weight: 500; }
+    .menu-item .desc { display: block; font-size: .83rem; color: var(--muted); font-weight: 400; }
+    .menu-item .dots { flex: 1; }
+    .menu-item .price { font-family: "Gowun Batang", serif; font-weight: 700; color: var(--wood); white-space: nowrap; }
+    .menu-note { margin-top: 20px; font-size: .85rem; color: var(--muted); }
+
+    .beans { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .bean {
+      border: 1px solid rgba(79,111,58,.25); border-radius: 14px; padding: 18px 20px;
+      background: #fff; position: relative;
+    }
+    .bean .origin { font-size: .75rem; color: var(--green); font-weight: 700; letter-spacing: .1em; }
+    .bean h4 { font-family: "Gowun Batang", serif; font-size: 1.08rem; color: var(--wood-dark); margin: 2px 0 6px; padding-right: 54px; }
+    .bean p { font-size: .87rem; color: var(--muted); line-height: 1.6; }
+    .bean .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+    .bean .tags span { font-size: .74rem; padding: 2px 9px; border-radius: 999px; background: var(--cream); color: var(--wood); }
+    .bean .price { position: absolute; top: 18px; right: 20px; font-family: "Gowun Batang", serif; font-weight: 700; color: var(--green); }
+    .bean.pick { border: 2px solid var(--green); }
+    .bean.pick::after {
+      content: "사장님 추천"; position: absolute; top: -11px; left: 16px;
+      background: var(--green); color: #fff; font-size: .72rem; padding: 2px 10px; border-radius: 999px;
+    }
+    .bean.wide { grid-column: 1 / -1; }
+
+    /* ---------- 핸드드립 스토리 (사진 배너) ---------- */
+    .story {
+      position: relative; padding: 0; color: #fff; overflow: hidden;
+    }
+    .story-grid { display: grid; grid-template-columns: 1fr 1fr; min-height: 520px; }
+    .story-photo { position: relative; }
+    .story-photo img { position: absolute; inset: 0; }
+    .story-text {
+      background: var(--wood-dark); padding: 72px clamp(28px, 6vw, 80px);
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .story-text .eyebrow-dark { color: #a9c48a; }
+    .story-text h2 { font-size: clamp(1.8rem, 3.6vw, 2.5rem); line-height: 1.35; margin: 10px 0 20px; }
+    .story-text p { color: rgba(255,255,255,.78); margin-bottom: 14px; }
+    .steps { display: flex; gap: 22px; margin-top: 22px; flex-wrap: wrap; }
+    .steps div { border-left: 2px solid var(--wood-light); padding-left: 12px; }
+    .steps b { display: block; font-family: "Gowun Batang", serif; font-size: 1.4rem; color: var(--wood-light); }
+    .steps span { font-size: .85rem; color: rgba(255,255,255,.7); }
+
+    /* ---------- 갤러리 ---------- */
+    .gallery { background: var(--paper); }
+    .gallery-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 200px; gap: 12px;
+    }
+    .gallery-grid figure { border-radius: 14px; overflow: hidden; position: relative; }
+    .gallery-grid figure img { transition: transform .8s ease; }
+    .gallery-grid figure:hover img { transform: scale(1.07); }
+    .gallery-grid .tall { grid-row: span 2; }
+    .gallery-grid .wide { grid-column: span 2; }
+
+    /* ---------- 오시는 길 ---------- */
+    .info { background: var(--cream); }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: stretch; }
+    .info-cards { display: grid; gap: 14px; }
+    .info-card {
+      display: flex; gap: 18px; align-items: flex-start;
+      background: var(--paper); border-radius: var(--radius); padding: 24px 26px;
+      border: 1px solid rgba(139,94,60,.1);
+    }
+    .info-card .icon {
+      flex: none; width: 48px; height: 48px; border-radius: 14px;
+      display: grid; place-items: center; font-size: 1.35rem; background: var(--green-pale);
+    }
+    .info-card h3 { font-size: 1.02rem; color: var(--wood-dark); }
+    .info-card p { color: var(--muted); }
+    .info-card .big { font-size: 1.25rem; color: var(--text); font-weight: 700; font-family: "Gowun Batang", serif; }
+    .info-card a.big:hover { color: var(--green); }
+    .visit-photo {
+      position: relative; border-radius: var(--radius); overflow: hidden; min-height: 380px;
+      box-shadow: var(--shadow);
+    }
+    .visit-photo img { position: absolute; inset: 0; }
+    .visit-photo .overlay {
+      position: absolute; inset: auto 0 0 0; padding: 70px 22px 20px;
+      background: linear-gradient(to top, rgba(30,20,12,.85), transparent);
+      color: #fff;
+    }
+    .visit-photo .overlay p { font-family: "Gowun Batang", serif; font-size: 1.15rem; margin-bottom: 14px; }
+    .map-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .map-actions a { flex: 1; min-width: 120px; text-align: center; padding: 11px; border-radius: 12px; font-weight: 500; font-size: .92rem; }
+    .map-naver { background: #03c75a; color: #fff; }
+    .map-kakao { background: #fee500; color: #3b1e1e; }
+
+    /* ---------- 푸터 ---------- */
+    footer { background: var(--wood-dark); color: #e9dccb; padding: 48px 0 36px; text-align: center; }
+    footer .logo { color: #fff; display: block; margin-bottom: 8px; }
+    footer p { font-size: .9rem; opacity: .85; }
+    footer small { display: block; margin-top: 18px; opacity: .55; font-size: .78rem; }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s ease, transform .8s ease; }
+    .reveal.show { opacity: 1; transform: none; }
+
+    /* ---------- 반응형 ---------- */
+    @media (max-width: 900px) {
+      .about-grid, .info-grid, .story-grid { grid-template-columns: 1fr; }
+      .about-grid { gap: 40px; }
+      .story-photo { min-height: 320px; }
+      .menu-panel.active { grid-template-columns: 1fr; }
+      .menu-photo { min-height: 220px; }
+      .menu-body { padding: 26px 22px; }
+      .menu-list, .beans { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 160px; }
+      section { padding: 72px 0; }
+    }
+    @media (max-width: 560px) {
+      .nav ul { gap: 16px; }
+      .nav ul a { font-size: .88rem; }
+      .nav ul li.hide-sm { display: none; }
+      .collage { grid-template-rows: 160px 160px; }
+      .hero-info { gap: 14px; flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 헤더 -->
+  <header id="top">
+    <div class="container nav">
+      <a href="#" class="logo">그냥 카페</a>
+      <nav>
+        <ul>
+          <li class="hide-sm"><a href="#about">소개</a></li>
+          <li><a href="#menu">메뉴</a></li>
+          <li class="hide-sm"><a href="#gallery">공간</a></li>
+          <li><a href="#info">오시는 길</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 히어로 -->
+  <section class="hero">
+    <div class="bg">
+      <img class="photo" src="https://images.unsplash.com/photo-1774576752179-3408c26b774f?auto=format&fit=crop&w=2000&q=80" alt="나무 테이블과 창가의 초록 식물이 있는 아늑한 카페 내부">
+    </div>
+    <div class="container">
+      <span class="eyebrow">MOKDONG · NEIGHBORHOOD CAFE</span>
+      <h1>오늘도,<br>그냥 들러요</h1>
+      <p class="lead">
+        나무 테이블과 초록 화분 사이, 천천히 내린 핸드드립 한 잔과 갓 구운 쿠키.
+        특별한 이유 없이도 머물고 싶은 목동의 작은 동네 카페입니다.
+      </p>
+      <div class="btns">
+        <a href="#menu" class="btn btn-primary">메뉴 보기</a>
+        <a href="#info" class="btn btn-ghost">오시는 길</a>
+      </div>
+      <div class="hero-info">
+        <div>🕘 <b>매일 09:00 – 19:00</b></div>
+        <div>📍 <b>서울 양천구 목동</b></div>
+        <div>📞 <b><a href="tel:010-1111-2222">010-1111-2222</a></b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 소개 -->
+  <section class="about" id="about">
+    <div class="container about-grid">
+      <div class="collage reveal">
+        <figure><img class="photo" loading="lazy" src="https://images.unsplash.com/photo-1777451441095-c7ef2f875929?auto=format&fit=crop&w=900&q=80" alt="초록 식물이 가득한 나무 인테리어 카페"></figure>
+        <figure><img class="photo" loading="lazy" src="https://images.unsplash.com/photo-1762770622112-4a708ce0d731?auto=format&fit=crop&w=700&q=80" alt="나무 선반과 화분"></figure>
+        <figure><img class="photo" loading="lazy" src="https://images.unsplash.com/photo-1761695939620-a18c88ab83b7?auto=format&fit=crop&w=700&q=80" alt="식물과 좌석이 있는 카페 내부"></figure>
+      </div>
+
+      <div class="about-text reveal">
+        <span class="eyebrow-dark">ABOUT</span>
+        <h2>작고 아담한,<br>우리 동네의 쉼표</h2>
+        <p>
+          테이블 6~7개가 놓인 작은 공간이에요. 원목 가구와 창가의 초록 화분들이
+          햇살을 받아 하루 종일 따뜻한 분위기를 만들어 줍니다.
+        </p>
+        <p>혼자 책을 읽어도, 이웃과 수다를 떨어도 좋은 곳. 그냥, 편하게 머물다 가세요.</p>
+        <ul class="points">
+          <li><div class="ico">🪵</div><div><b>나무의 온기</b><span>원목 테이블과 의자, 오래 앉아도 편안한 자리</span></div></li>
+          <li><div class="ico">🪴</div><div><b>초록 화분</b><span>창가와 테이블 곳곳의 식물들이 주는 작은 숲</span></div></li>
+          <li><div class="ico">🍪</div><div><b>매일 굽는 쿠키</b><span>커피와 잘 어울리는 쿠키와 베이커리</span></div></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 메뉴 -->
+  <section class="menu" id="menu">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow-dark">MENU</span>
+        <h2>오늘의 메뉴</h2>
+        <p>기본에 충실한 커피와 음료, 그리고 그냥 카페만의 핸드드립</p>
+      </div>
+
+      <div class="tabs reveal" role="tablist">
+        <button class="tab active" data-tab="coffee" role="tab">커피</button>
+        <button class="tab" data-tab="noncoffee" role="tab">논커피 · 티</button>
+        <button class="tab special" data-tab="drip" role="tab">✨ 핸드드립 스페셜</button>
+        <button class="tab" data-tab="bakery" role="tab">쿠키 · 베이커리</button>
+      </div>
+
+      <div class="reveal">
+        <!-- 커피 -->
+        <div class="menu-panel active" id="coffee">
+          <div class="menu-photo">
+            <img class="photo" loading="lazy" src="https://images.unsplash.com/photo-1593443320739-77f74939d0da?auto=format&fit=crop&w=800&q=80" alt="나무 테이블 위의 라떼 한 잔">
+            <div class="cap"><h3>Coffee</h3><p>매일 아침 새로 갈아 내리는 에스프레소</p></div>
+          </div>
+          <div class="menu-body">
+            <ul class="menu-list">
+              <li class="menu-item"><span class="name">아메리카노<span class="desc">HOT / ICE</span></span><span class="dots"></span><span class="price">4,000</span></li>
+              <li class="menu-item"><span class="name">카페라떼<span class="desc">고소한 우유와 에스프레소</span></span><span class="dots"></span><span class="price">4,800</span></li>
+              <li class="menu-item"><span class="name">바닐라라떼<span class="desc">직접 만든 바닐라 시럽</span></span><span class="dots"></span><span class="price">5,300</span></li>
+              <li class="menu-item"><span class="name">카푸치노<span class="desc">부드러운 우유 거품</span></span><span class="dots"></span><span class="price">4,800</span></li>
+              <li class="menu-item"><span class="name">카페모카<span class="desc">진한 초콜릿 + 휘핑</span></span><span class="dots"></span><span class="price">5,500</span></li>
+              <li class="menu-item"><span class="name">플랫화이트<span class="desc">진한 리스트레토 베이스</span></span><span class="dots"></span><span class="price">5,000</span></li>
+              <li class="menu-item"><span class="name">에스프레소<span class="desc">싱글 / 더블</span></span><span class="dots"></span><span class="price">3,800</span></li>
+              <li class="menu-item"><span class="name">콜드브루<span class="desc">12시간 저온 추출</span></span><span class="dots"></span><span class="price">5,000</span></li>
+            </ul>
+            <p class="menu-note">샷 추가 +500 · 오트밀크 변경 +500 · 디카페인 변경 가능</p>
+          </div>
+        </div>
+
+        <!-- 논커피 -->
+        <div class="menu-panel" id="noncoffee">
+          <div class="menu-photo">
+            <img class="photo" loading="lazy" src="https://images.unsplash.com/photo-1717603545758-88cc454db69b?auto=format&fit=crop&w=800&q=80" alt="나무 테이블 위의 아이스 말차 라떼">
+            <div class="cap"><h3>Non-Coffee & Tea</h3><p>커피가 아니어도 좋은 날</p></div>
+          </div>
+          <div class="menu-body">
+            <ul class="menu-list">
+              <li class="menu-item"><span class="name">말차라떼<span class="desc">진한 제주 말차</span></span><span class="dots"></span><span class="price">5,500</span></li>
+              <li class="menu-item"><span class="name">초코라떼<span class="desc">달콤한 핫초코</span></span><span class="dots"></span><span class="price">5,000</span></li>
+              <li class="menu-item"><span class="name">고구마라떼<span class="desc">따뜻하고 든든하게</span></span><span class="dots"></span><span class="price">5,300</span></li>
+              <li class="menu-item"><span class="name">자몽에이드<span class="desc">상큼한 생자몽</span></span><span class="dots"></span><span class="price">5,800</span></li>
+              <li class="menu-item"><span class="name">레몬에이드<span class="desc">수제 레몬청</span></span><span class="dots"></span><span class="price">5,500</span></li>
+              <li class="menu-item"><span class="name">유자차<span class="desc">HOT / ICE</span></span><span class="dots"></span><span class="price">5,000</span></li>
+              <li class="menu-item"><span class="name">캐모마일 티<span class="desc">편안한 허브티</span></span><span class="dots"></span><span class="price">4,800</span></li>
+              <li class="menu-item"><span class="name">얼그레이 티<span class="desc">은은한 베르가못 향</span></span><span class="dots"></span><span class="price">4,800</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 핸드드립 -->
+        <div class="menu-panel" id="drip">
+          <div class="menu-photo">
+            <img class="photo" loading="lazy" src="https://images.unsplash.com/photo-1759259639356-7c6e74eed1ec?auto=format&fit=crop&w=800&q=80" alt="드리퍼에 뜨거운 물을 붓는 핸드드립">
+            <div class="cap"><h3>Hand Drip</h3><p>한 잔씩 천천히, 5~7분의 기다림</p></div>
+          </div>
+          <div class="menu-body">
+            <div class="beans">
+              <div class="bean pick">
+                <span class="price">7,000</span>
+                <span class="origin">ETHIOPIA</span>
+                <h4>에티오피아 예가체프</h4>
+                <p>꽃향기와 밝은 산미가 돋보이는 가볍고 화사한 커피.</p>
+                <div class="tags"><span>자스민</span><span>레몬</span><span>홍차</span></div>
+              </div>
+              <div class="bean">
+                <span class="price">7,000</span>
+                <span class="origin">COLOMBIA</span>
+                <h4>콜롬비아 수프리모</h4>
+                <p>견과류와 캐러멜 같은 단맛, 균형 잡힌 부드러운 한 잔.</p>
+                <div class="tags"><span>헤이즐넛</span><span>캐러멜</span></div>
+              </div>
+              <div class="bean">
+                <span class="price">7,500</span>
+                <span class="origin">KENYA</span>
+                <h4>케냐 AA</h4>
+                <p>베리류의 선명한 산미와 묵직한 바디감.</p>
+                <div class="tags"><span>블랙커런트</span><span>자몽</span></div>
+              </div>
+              <div class="bean">
+                <span class="price">8,500</span>
+                <span class="origin">GUATEMALA</span>
+                <h4>과테말라 안티구아</h4>
+                <p>스모키한 향과 다크초콜릿의 쌉쌀함.</p>
+                <div class="tags"><span>다크초콜릿</span><span>스모키</span></div>
+              </div>
+              <div class="bean wide">
+                <span class="price">9,000</span>
+                <span class="origin">SEASONAL · 이달의 원두</span>
+                <h4>그냥 블렌드 (하우스 스페셜)</h4>
+                <p>계절마다 바뀌는 사장님의 스페셜 원두. 오늘의 원두는 카운터에서 물어봐 주세요!</p>
+              </div>
+            </div>
+            <p class="menu-note">아이스 변경 가능 · 핸드드립 원두(200g)도 구매하실 수 있어요.</p>
+          </div>
+        </div>
+
+        <!-- 베이커리 -->
+        <div class="menu-panel" id="bakery">
+          <div class="menu-photo">
+            <img class="photo" loading="lazy" src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=800&q=80" alt="바구니에 담긴 초코칩 쿠키">
+            <div class="cap"><h3>Cookie & Bakery</h3><p>매일 조금씩, 정성껏 구워요</p></div>
+          </div>
+          <div class="menu-body">
+            <ul class="menu-list">
+              <li class="menu-item"><span class="name">초코칩 쿠키<span class="desc">겉바속촉 대표 쿠키</span></span><span class="dots"></span><span class="price">3,000</span></li>
+              <li class="menu-item"><span class="name">오트밀 크랜베리 쿠키<span class="desc">고소하고 새콤하게</span></span><span class="dots"></span><span class="price">3,200</span></li>
+              <li class="menu-item"><span class="name">마카다미아 쿠키<span class="desc">바삭한 견과 듬뿍</span></span><span class="dots"></span><span class="price">3,500</span></li>
+              <li class="menu-item"><span class="name">플레인 스콘<span class="desc">클로티드크림 & 잼 제공</span></span><span class="dots"></span><span class="price">3,800</span></li>
+              <li class="menu-item"><span class="name">휘낭시에<span class="desc">버터 향 가득</span></span><span class="dots"></span><span class="price">2,800</span></li>
+              <li class="menu-item"><span class="name">마들렌<span class="desc">레몬 / 얼그레이</span></span><span class="dots"></span><span class="price">2,800</span></li>
+              <li class="menu-item"><span class="name">바스크 치즈케이크<span class="desc">진하고 꾸덕한 한 조각</span></span><span class="dots"></span><span class="price">6,500</span></li>
+              <li class="menu-item"><span class="name">버터 크루아상<span class="desc">매일 아침 구워요</span></span><span class="dots"></span><span class="price">4,000</span></li>
+            </ul>
+            <p class="menu-note">매일 소량만 구워서 조기 품절될 수 있어요 🍪</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 핸드드립 스토리 -->
+  <section class="story">
+    <div class="story-grid">
+      <div class="story-photo">
+        <img class="photo" loading="lazy" src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=1200&q=80" alt="바에서 여러 잔의 핸드드립 커피를 내리는 모습">
+      </div>
+      <div class="story-text reveal">
+        <span class="eyebrow-dark">OUR HAND DRIP</span>
+        <h2>기다림까지<br>맛있는 한 잔</h2>
+        <p>그냥 카페의 핸드드립은 주문을 받은 뒤에 원두를 갈아, 원두마다 어울리는 온도와 속도로 한 잔씩 내립니다.</p>
+        <p>조금 느리지만, 그 기다림만큼 향과 맛이 깊어져요.</p>
+        <div class="steps">
+          <div><b>01</b><span>주문 후 분쇄</span></div>
+          <div><b>02</b><span>30초 뜸 들이기</span></div>
+          <div><b>03</b><span>천천히 추출</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 갤러리 -->
+  <section class="gallery" id="gallery">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow-dark">SPACE</span>
+        <h2>그냥 카페의 하루</h2>
+        <p>나무와 초록, 그리고 커피 향이 머무는 공간</p>
+      </div>
+      <div class="gallery-grid reveal">
+        <figure class="tall"><img class="photo" loading="lazy" src="https://images.unsplash.com/photo-1762770622112-4a708ce0d731?auto=format&fit=crop&w=600&h=820&q=80" alt="나무 선반과 화분"></figure>
+        <figure class="wide"><img class="photo" loading="lazy" src="https://images.unsplash.com/photo-1777451441095-c7ef2f875929?auto=format&fit=crop&w=1000&q=80" alt="식물이 가득한 카페 공간"></figure>
+        <figure><img class="photo" loading="lazy" src="https://images.unsplash.com/photo-1497636577773-f1231844b336?auto=format&fit=crop&w=600&q=80" alt="카푸치노 한 잔"></figure>
+        <figure><img class="photo" loading="lazy" src="https://images.unsplash.com/photo-1559594323-25090515ee2f?auto=format&fit=crop&w=600&q=80" alt="커피와 쿠키"></figure>
+        <figure><img class="photo" loading="lazy" src="https://images.unsplash.com/photo-1522012188892-24beb302783d?auto=format&fit=crop&w=600&q=80" alt="머그잔에 커피를 따르는 모습"></figure>
+        <figure class="wide"><img class="photo" loading="lazy" src="https://images.unsplash.com/photo-1769184613600-1a309a70196b?auto=format&fit=crop&w=1000&q=80" alt="식물과 좌석이 있는 아늑한 카페"></figure>
+        <figure class="wide"><img class="photo" loading="lazy" src="https://images.unsplash.com/photo-1726733995322-13779de0111f?auto=format&fit=crop&w=1000&q=80" alt="나무 테이블 위의 쿠키"></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 오시는 길 -->
+  <section class="info" id="info">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow-dark">VISIT</span>
+        <h2>오시는 길</h2>
+        <p>목동 골목 어귀, 초록 화분이 보이면 그곳이에요.</p>
+      </div>
+      <div class="info-grid">
+        <div class="info-cards">
+          <div class="info-card reveal">
+            <div class="icon">🕘</div>
+            <div><h3>운영시간</h3><p class="big">매일 09:00 – 19:00</p><p>월요일 ~ 일요일 · 연중무휴</p></div>
+          </div>
+          <div class="info-card reveal">
+            <div class="icon">📍</div>
+            <div><h3>위치</h3><p class="big">서울 양천구 목동</p><p>동네 골목의 작은 카페 · 테이블 6~7석</p></div>
+          </div>
+          <div class="info-card reveal">
+            <div class="icon">📞</div>
+            <div><h3>연락처</h3><a href="tel:010-1111-2222" class="big">010-1111-2222</a><p>단체 예약 · 원두 주문 문의 환영</p></div>
+          </div>
+        </div>
+        <div class="visit-photo reveal">
+          <img class="photo" loading="lazy" src="https://images.unsplash.com/photo-1769473357479-d94ce818dba7?auto=format&fit=crop&w=1000&q=80" alt="햇살이 드는 카페의 나무 의자와 테이블">
+          <div class="overlay">
+            <p>“특별한 날이 아니어도 괜찮아요. 그냥, 오세요.”</p>
+            <div class="map-actions">
+              <a class="map-naver" href="https://map.naver.com/p/search/%EC%96%91%EC%B2%9C%EA%B5%AC%20%EB%AA%A9%EB%8F%99%20%EA%B7%B8%EB%83%A5%EC%B9%B4%ED%8E%98" target="_blank" rel="noopener">네이버 지도</a>
+              <a class="map-kakao" href="https://map.kakao.com/?q=%EC%96%91%EC%B2%9C%EA%B5%AC%20%EB%AA%A9%EB%8F%99%20%EA%B7%B8%EB%83%A5%EC%B9%B4%ED%8E%98" target="_blank" rel="noopener">카카오맵</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 푸터 -->
+  <footer>
+    <div class="container">
+      <span class="logo">그냥 카페</span>
+      <p>서울 양천구 목동 · 매일 09:00 – 19:00 · 010-1111-2222</p>
+      <small>© 2026 그냥 카페 · Photos from Unsplash (분위기 예시 사진)</small>
+    </div>
+  </footer>
+
+  <script>
+    // 스크롤하면 헤더 배경 생기기
+    var header = document.getElementById('top');
+    function onScroll() { header.classList.toggle('scrolled', window.scrollY > 40); }
+    window.addEventListener('scroll', onScroll); onScroll();
+
+    // 메뉴 탭 전환
+    document.querySelectorAll('.tab').forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        document.querySelectorAll('.tab').forEach(function (t) { t.classList.remove('active'); });
+        document.querySelectorAll('.menu-panel').forEach(function (p) { p.classList.remove('active'); });
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    // 스크롤 시 부드럽게 나타나기
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('show'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+  </script>
+</body>
+</html>
